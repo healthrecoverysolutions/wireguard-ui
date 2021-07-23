@@ -5,7 +5,7 @@ name: default
 steps:
 
   - name: yarn
-    image: node:8.6.0
+    image: node:latest
     commands:
       - yarn install --pure-lockfile --production
 
