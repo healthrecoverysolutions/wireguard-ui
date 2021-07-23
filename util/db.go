@@ -35,12 +35,12 @@ func DBConn() (*scribble.Driver, error) {
 
 // InitDB to create the default database
 func InitDB() error {
-	var clientPath string = path.Join(dbPath, "clients")
-	var serverPath string = path.Join(dbPath, "server")
-	var serverInterfacePath string = path.Join(serverPath, "interfaces.json")
-	var serverKeyPairPath string = path.Join(serverPath, "keypair.json")
-	var globalSettingPath string = path.Join(serverPath, "global_settings.json")
-	var userPath string = path.Join(serverPath, "users.json")
+	var clientPath = path.Join(dbPath, "clients")
+	var serverPath = path.Join(dbPath, "server")
+	var serverInterfacePath = path.Join(serverPath, "interfaces.json")
+	var serverKeyPairPath = path.Join(serverPath, "keypair.json")
+	var globalSettingPath = path.Join(serverPath, "global_settings.json")
+	var userPath = path.Join(serverPath, "users.json")
 
 	// create directories if they do not exist
 	if _, err := os.Stat(clientPath); os.IsNotExist(err) {
@@ -111,9 +111,19 @@ func InitDB() error {
 			return err
 		}
 
+		username := os.Getenv("ADMIN_USERNAME")
+		if len(username) == 0 {
+			username = defaultUsername
+		}
+
+		password := os.Getenv("ADMIN_PASSWORD")
+		if len(password) == 0 {
+			password = defaultPassword
+		}
+
 		user := new(model.User)
-		user.Username = defaultUsername
-		user.Password = defaultPassword
+		user.Username = username
+		user.Password = password
 		db.Write("server", "users", user)
 	}
 

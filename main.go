@@ -7,6 +7,7 @@ import (
 	"time"
 
 	rice "github.com/GeertJohan/go.rice"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/labstack/echo/v4"
 	"github.com/ngoduykhanh/wireguard-ui/handler"
 	"github.com/ngoduykhanh/wireguard-ui/router"
