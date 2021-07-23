@@ -2,22 +2,23 @@ kind: pipeline
 type: docker
 name: default
 
+workspace:
+  path: /output
+
 steps:
-
-  - name: yarn
-    image: node:latest
+  - name: build app
+    image: registry.hrsanchor.com/go-builder
     commands:
-      - yarn install --pure-lockfile --production
-      - ./prepare_assets.sh
+      - go get -d -v
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-w -s -extldflags "-static"' -o linux_amd64
 
-  - name: build
-    image: golang
-    commands:
-      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-w -s -extldflags "-static"' -o wireguard_ui_linux_amd64
-
-  - name: upload
-    image: plugins/s3
+  - name: publish
+    image: plugins/ecr
     settings:
-      bucket: app-build-packages
-      source: wireguard_ui_linux_amd64
-      target: /wireguard_ui/app
+      repo: wireguard-ui
+      registry: 072805691757.dkr.ecr.us-east-1.amazonaws.com
+      tags:
+        - master
+    when:
+      branch:
+        - master
