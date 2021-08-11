@@ -29,6 +29,9 @@ function renderClientList(data) {
                                 <div class="btn-group">
                                     <button onclick="location.href='/download?clientid=${obj.Client.id}'" type="button"
                                         class="btn btn-outline-success btn-sm">Download</button>
+                                    <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal"
+                                        data-target="#modal_email_client" data-clientid="${obj.Client.id}"
+                                        data-clientname="${obj.Client.name}">Email</button>
                                     <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
                                         data-target="#modal_edit_client" data-clientid="${obj.Client.id}"
                                         data-clientname="${obj.Client.name}">Edit</button>
@@ -46,6 +49,8 @@ function renderClientList(data) {
                                     ${obj.Client.created_at}</span>
                                 <span class="info-box-text"><i class="fas fa-history"></i>
                                     ${obj.Client.updated_at}</span>
+                                <span class="info-box-text"><i class="fas fa-server" style="${obj.Client.use_server_dns ? "opacity: 1.0" : "opacity: 0.5"}"></i>
+                                    ${obj.Client.use_server_dns ? 'DNS enabled' : 'DNS disabled'}</span>
                                 <span class="info-box-text"><strong>IP Allocation</strong></span>`
                                 + allocatedIpsHtml
                                 + `<span class="info-box-text"><strong>Allowed IPs</strong></span>`
