@@ -6,12 +6,6 @@ workspace:
   path: /output
 
 steps:
-  - name: build app
-    image: registry.hrsanchor.com/go-builder
-    commands:
-      - go get -d -v
-      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-w -s -extldflags "-static"' -o linux_amd64
-
   - name: publish
     image: plugins/ecr
     settings:
