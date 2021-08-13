@@ -1,8 +1,9 @@
 package emailer
 
 type Attachment struct {
-	Name string
-	Data []byte
+	Name 		string
+	Data 		[]byte
+	ContentType string
 }
 
 type Emailer interface {

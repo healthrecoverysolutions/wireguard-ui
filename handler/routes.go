@@ -211,12 +211,12 @@ func EmailClient(mailer emailer.Emailer, emailSubject, emailContent string) echo
 		globalSettings, _ := util.GetGlobalSettings()
 		config := util.BuildClientConfig(*clientData.Client, server, globalSettings)
 
-		cfg_att := emailer.Attachment{"wg0.conf", []byte(config)}
+		cfg_att := emailer.Attachment{"wg0.conf", []byte(config), "text/plain"}
 		qrdata, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(clientData.QRCode, "data:image/png;base64,"))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, "decoding: " + err.Error()})
 		}
-		qr_att := emailer.Attachment{"wg.png", qrdata}
+		qr_att := emailer.Attachment{"wg.png", qrdata, "image/png"}
 		err = mailer.Send(
 			clientData.Client.Name,
 			payload.Email,

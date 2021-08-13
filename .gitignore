@@ -21,3 +21,7 @@ rice-box.go
 # IDEs
 .vscode
 .idea
+
+# Local development build file
+build.sh
+wg-ui

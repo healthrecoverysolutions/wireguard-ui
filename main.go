@@ -28,7 +28,8 @@ var (
 const (
 	defaultEmailSubject = "Your wireguard configuration"
 	defaultEmailContent = `Hi,</br>
-<p>in this email you can file your personal configuration for our wireguard server.</p>
+<p>In this email you can file your personal configuration for our wireguard server attached.</p>
+<p>
 
 <p>Best</p>
 `
@@ -44,9 +45,10 @@ func init() {
 	util.DisableLogin = *flagDisableLogin
 	util.BindAddress = *flagBindAddress
 	util.SendgridApiKey = os.Getenv("SENDGRID_API_KEY")
-	util.EmailFrom = os.Getenv("EMAIL_FROM")
+	util.EmailFrom = "no-reply@healthrecoverysolutions.com" //os.Getenv("EMAIL_FROM")
 	util.EmailFromName = os.Getenv("EMAIL_FROM_NAME")
 	util.SessionSecret = []byte(os.Getenv("SESSION_SECRET"))
+	util.SESRegion = "us-east-1" // os.Getenv("SES_REGION")
 
 	// print app information
 	fmt.Println("Wireguard UI")
@@ -86,12 +88,18 @@ func main() {
 		app.POST("/login", handler.Login())
 	}
 
-	sendmail := emailer.NewSendgridApiMail(util.SendgridApiKey, util.EmailFromName, util.EmailFrom)
+	var sendMail emailer.Emailer
+	if len(util.SendgridApiKey) > 0 {
+		sendMail = emailer.NewSendgridApiMail(util.SendgridApiKey, util.EmailFromName, util.EmailFrom)
+	} else if len(util.SESRegion) > 0 {
+		sendMail = emailer.NewSESApiMail(util.SESRegion, util.EmailFrom)
+	}
+	sendMail = emailer.NewSESApiMail(util.SESRegion, util.EmailFrom)
 
 	app.GET("/logout", handler.Logout(), handler.ValidSession)
 	app.POST("/new-client", handler.NewClient(), handler.ValidSession)
 	app.POST("/update-client", handler.UpdateClient(), handler.ValidSession)
-	app.POST("/email-client", handler.EmailClient(sendmail, defaultEmailSubject, defaultEmailContent), handler.ValidSession)
+	app.POST("/email-client", handler.EmailClient(sendMail, defaultEmailSubject, defaultEmailContent), handler.ValidSession)
 	app.POST("/client/set-status", handler.SetClientStatus(), handler.ValidSession)
 	app.POST("/remove-client", handler.RemoveClient(), handler.ValidSession)
 	app.GET("/download", handler.DownloadClient(), handler.ValidSession)

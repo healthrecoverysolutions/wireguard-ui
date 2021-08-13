@@ -3,12 +3,14 @@ module github.com/ngoduykhanh/wireguard-ui
 go 1.14
 
 require (
-	github.com/GeertJohan/go.rice v1.0.0
+	github.com/GeertJohan/go.rice v1.0.2
+	github.com/aws/aws-sdk-go v1.40.22
 	github.com/glendc/go-external-ip v0.0.0-20170425150139-139229dcdddd
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/gorilla/sessions v1.2.0
 	github.com/jcelliott/lumber v0.0.0-20160324203708-dd349441af25 // indirect
 	github.com/joho/godotenv v1.3.0
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/labstack/echo-contrib v0.9.0
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/labstack/gommon v0.3.0
